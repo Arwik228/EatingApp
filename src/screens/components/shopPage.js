@@ -1,9 +1,8 @@
-
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TextInput, StatusBar, TouchableOpacity } from "react-native";
 import CupertinoFooter2 from "./components/navigatorBar";
 
-export default class Messages extends Component {
+export default class shopPage extends Component {
     render(props) {
         return (
             <View style={styles.container}>
@@ -12,10 +11,12 @@ export default class Messages extends Component {
                         barStyle="dark-content"
                         backgroundColor="#ffffff"
                     />
-                    <Text>Message content</Text>
+                    <View>
+
+                    </View>
                 </View>
                 <CupertinoFooter2
-                    active="message"
+                    active="save"
                     messageCallback={() => this.props.navigation.navigate("Messages")}
                     searchCallback={() => this.props.navigation.navigate("Search")}
                     starCallback={() => this.props.navigation.navigate("Saves")}

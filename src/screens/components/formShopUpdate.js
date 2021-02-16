@@ -28,33 +28,21 @@ export default class FormShop extends Component {
     }
 
     async createShop() {
-        if (!this.state.name) {
-            this.renderError("Заполните поле Название");
-            return 0;
-        }
-
-        if (!this.state.information) {
-            this.renderError("Заполните поле Описание");
-            return 0;
-        }
-
-        if (!this.state.category) {
-            this.renderError("Перечислите категории через ','");
-            return 0;
-        }
-
         let token = JSON.parse(await AsyncStorage.getItem("token"));
         let double = JSON.parse(await AsyncStorage.getItem("double"));
-
         let formData = new FormData();
-
         this.setState({ errorText: "Обработка" });
-
         formData.append('double', double);
-        formData.append('nameShop', this.state.name);
-        formData.append('information', this.state.information);
-        formData.append('category', this.state.category);
-
+        formData.append('idShop', this.props.id);
+        if (this.state.name) {
+            formData.append('nameShop', this.state.name);
+        }
+        if (this.state.information) {
+            formData.append('information', this.state.information);
+        }
+        if (this.state.category) {
+            formData.append('category', this.state.category);
+        }
         if (this.state.image['uri']) {
             formData.append('image', {
                 uri: this.state.image.uri,
@@ -63,7 +51,6 @@ export default class FormShop extends Component {
                 data: this.state.image.data,
             });
         }
-
         let request = new XMLHttpRequest();
         request.this = this;
         request.onload = async function (e) {
@@ -73,20 +60,19 @@ export default class FormShop extends Component {
                 let data = JSON.parse(request.response).response
                 if (data.status == "ok") {
                     let user = JSON.parse(await AsyncStorage.getItem("userInfo"));
-                    user.stores.push({ admin: user.id, id: data.id, name: e.target.this.state.name });
-                    await AsyncStorage.setItem("userInfo", JSON.stringify(user))
+                    let index = user.stores.findIndex(o => { return o.id === e.target.this.props.id });
+                    user.stores[index] = { admin: user.id, id: e.target.this.props.id, name: e.target.this.state.name || e.target.this.state.defaultData['name'] }
+                    await AsyncStorage.setItem("userInfo", JSON.stringify(user));
                     e.target.this.props.final()
                 } else {
                     e.target.this.renderError(data.info)
                 }
             }
         };
-
         request.onerror = function () {
             this.renderError("Проблемы соединения");
         };
-
-        request.open("POST", `${config.host}/api/createShops/${token}`);
+        request.open("PUT", `${config.host}/api/updateShops/${token}`);
         request.send(formData);
     }
 
@@ -181,10 +167,10 @@ export default class FormShop extends Component {
                     </View>
                     <TouchableOpacity
                         onPress={() => { this.createShop() }}
-                        style={[styles.button, { backgroundColor: "lime" }]}
+                        style={[styles.button, { backgroundColor: "orange" }]}
                     >
                         <Text style={styles.text}>
-                            Создать магазин
+                            Редактировать магазин
                         </Text>
                     </TouchableOpacity>
                 </View>

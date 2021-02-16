@@ -32,10 +32,6 @@ export default class Profile extends Component {
         this.setState({ create: true })
     }
 
-    openShop = (id) => {
-
-    }
-
     async editShop(id) {
         let stores = JSON.parse(await AsyncStorage.getItem("userInfo"))['stores']
         this.setState({ edit: stores.filter(e => e.id === id)[0].id })
@@ -113,7 +109,7 @@ export default class Profile extends Component {
         let userInfo = JSON.parse(await AsyncStorage.getItem("userInfo"));
         if (userInfo) {
             let arrayStores = userInfo.stores.map((arr) =>
-                <TouchableOpacity onPress={() => { this.openShop(arr.id) }}
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate("Shop", { shopID: arr.id }) }}
                     style={[styles.block, { padding: 5, backgroundColor: this.color[[Math.floor(Math.random() * this.color.length)]] }]}
                     key={arr.id.toString()}>
                     <View style={{ display: "flex", width: 100, flexDirection: "row" }}>

@@ -11,6 +11,8 @@ import Registration from "./src/screens/Registration";
 import ResetPassword from "./src/screens/ResetPassword";
 import Search from "./src/screens/Search";
 import Saves from "./src/screens/Saves";
+import Shop from "./src/screens/Shop";
+import Product from "./src/screens/Product";
 import Profile from "./src/screens/Profile";
 import Messages from "./src/screens/Messages";
 
@@ -75,7 +77,9 @@ export default class App extends Component {
           Search,
           Saves,
           Profile,
-          Messages
+          Messages,
+          Shop,
+          Product
         }), {
         headerMode: 'none',
         defaultNavigationOptions: {
